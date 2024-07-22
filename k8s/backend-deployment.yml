@@ -36,6 +36,6 @@ spec:
           - name: AZURE_CONTAINER_NAME
           valueFrom:
             secretKeyRef:
-              name: azure-storage-container-name
+              name: azure-storage-secret
               key: AZURE_CONTAINER_NAME
             
