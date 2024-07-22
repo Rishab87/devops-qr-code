@@ -1,0 +1,39 @@
+services:
+  backend:
+    build: 
+      context: ./api
+    env_file:
+      - ./api/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - prometheus-server
+      - grafana-server
+      - grafana-loki
+
+  frontend:
+    build: 
+      context: ./front-end-nextjs
+      dockerfile: Dockerfile
+      target: production
+    volumes:
+      - /app/
+    ports:
+      - "3000:3000"
+
+  prometheus-server:
+    image: prom/prometheus
+    volumes:
+      - ./api/prometheus-config.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+      
+  grafana-server:
+    image: grafana/grafana
+    ports:
+      - "5000:3000"
+
+  grafana-loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"

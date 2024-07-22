@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      initContainers:
+        - name: wait-for-prometheus
+          image: busybox
+          command: ['sh', '-c', 'until nc -z prometheus 9090; do echo waiting for prometheus; sleep 2; done;']
+        - name: wait-for-grafana
+          image: busybox
+          command: ['sh', '-c', 'until nc -z grafana 3000; do echo waiting for grafana; sleep 2; done;']
+        - name: wait-for-loki
+          image: busybox
+          command: ['sh', '-c', 'until nc -z loki 3100; do echo waiting for loki; sleep 2; done;']
+      containers:
+        - name: backend
+          image: rishab87/qr-code-backend:latest
+          ports:
+            - containerPort: 8000
+          env:
+          - name: AZURE_STORAGE_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: azure-storage-secret
+              key: AZURE_STORAGE_CONNECTION_STRING
+          - name: AZURE_CONTAINER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: azure-storage-container-name
+              key: AZURE_CONTAINER_NAME
+            
