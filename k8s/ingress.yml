@@ -6,7 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: https://aksprefix-kjszezy6.hcp.centralindia.azmk8s.io/
+    - host: aksprefix-kjszezy6.hcp.centralindia.azmk8s.io
       http:
         paths:
           - path: /
