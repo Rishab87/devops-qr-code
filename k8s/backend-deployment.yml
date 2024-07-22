@@ -27,15 +27,15 @@ spec:
           image: rishab87/qr-code-backend:latest
           ports:
             - containerPort: 8000
-          env:
+        env:
           - name: AZURE_STORAGE_CONNECTION_STRING
-          valueFrom:
-            secretKeyRef:
-              name: azure-storage-secret
-              key: AZURE_STORAGE_CONNECTION_STRING
+            valueFrom:
+              secretKeyRef:
+                name: azure-storage-secret
+                key: AZURE_STORAGE_CONNECTION_STRING
           - name: AZURE_CONTAINER_NAME
-          valueFrom:
-            secretKeyRef:
-              name: azure-storage-secret
-              key: AZURE_CONTAINER_NAME
+            valueFrom:
+              secretKeyRef:
+                name: azure-storage-secret
+                key: AZURE_CONTAINER_NAME 
             
