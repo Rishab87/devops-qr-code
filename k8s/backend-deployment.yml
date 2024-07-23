@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
+  namespace: ingress-nginx
 spec:
   replicas: 1
   selector:
@@ -12,16 +13,6 @@ spec:
       labels:
         app: backend
     spec:
-      initContainers:
-        - name: wait-for-prometheus
-          image: busybox
-          command: ['sh', '-c', 'until nc -z prometheus 9090; do echo waiting for prometheus; sleep 2; done;']
-        - name: wait-for-grafana
-          image: busybox
-          command: ['sh', '-c', 'until nc -z grafana 3000; do echo waiting for grafana; sleep 2; done;']
-        - name: wait-for-loki
-          image: busybox
-          command: ['sh', '-c', 'until nc -z loki 3100; do echo waiting for loki; sleep 2; done;']
       containers:
         - name: backend
           image: rishab87/qr-code-backend:latest

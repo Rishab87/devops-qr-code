@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-config
-  namespace: monitoring
+  namesapce: ingress-nginx
 data:
   prometheus.yml: |
     global:

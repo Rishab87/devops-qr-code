@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-deployment
+  namespace: ingress-nginx
 spec:
   replicas: 1
   selector:
@@ -17,4 +18,3 @@ spec:
           image: rishab87/qr-code-frontend:latest
           ports:
             - containerPort: 3000
-  
