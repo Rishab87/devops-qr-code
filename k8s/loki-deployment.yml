@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loki
-  namesapce: ingress-nginx
   labels:
     app: loki
 spec:
