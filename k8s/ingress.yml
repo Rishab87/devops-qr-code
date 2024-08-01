@@ -6,7 +6,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    # nginx.ingress.kubernetes.io/rewrite-target: /
 spec: 
   ingressClassName: nginx
   rules:
@@ -19,24 +19,12 @@ spec:
                 name: frontend-service
                 port:
                   number: 80
-          - path: /prometheus
+          - path: /g
             pathType: Prefix
             backend:
               service:
-                name: prometheus
-                port:
-                  number: 9091
-          - path: /grafana
-            pathType: Prefix
-            backend:
-              service:
-                name: grafana
+                name: grafana-service
                 port:
                   number: 5000
-          - path: /loki
-            pathType: Prefix
-            backend:
-              service:
-                name: loki
-                port:
-                  number: 3100
+
+

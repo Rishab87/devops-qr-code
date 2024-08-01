@@ -19,3 +19,8 @@ spec:
           image: grafana/grafana:latest
           ports:
             - containerPort: 3000
+          env:
+            - name: GF_SERVER_ROOT_URL
+              value: http://4.224.107.78/g/
+            - name: GF_SERVER_SERVE_FROM_SUB_PATH
+              value: "true"
