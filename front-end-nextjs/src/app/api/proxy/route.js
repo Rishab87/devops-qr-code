@@ -1,21 +1,28 @@
-import httpProxy from 'http-proxy';
-
-// Create a proxy server
-const proxy = httpProxy.createProxyServer();
-
 export async function POST(req) {
-  return new Promise((resolve, reject) => {
-    req.url = req.url.replace(/^\/api\/proxy/, ''); // Adjust URL path if needed
+  return await handleProxy(req);
+}
 
-    proxy.web(req, {
-      target: 'http://backend-service',
-      changeOrigin: true,
-    }, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(new Response(null, { status: 200 }));
-      }
-    });
+async function handleProxy(req) {
+
+  const body = await req.json();
+  const {url} = body;
+  const backendUrl = `http://backend-service/generate-qr/?${url}`;
+
+  const response = await fetch(backendUrl , {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
+
+  if (!response.ok) {
+    return {
+      status: response.status,
+      body: await response.text(),
+    };
+  }
+
+  const data = await response.json();
+  return data.data.qr_code_url;
+  
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react';
-import axios from 'axios';
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -10,8 +9,21 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/api/proxy/generate-qr/?url=${url}`);
-      setQrCodeUrl(response.data.qr_code_url);
+      const response = await fetch('/api/proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+      
+      if (!response.ok) {
+        console.error('Error generating QR Code:', response.statusText);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setQrCodeUrl(data);
     } catch (error) {
       console.error('Error generating QR Code:', error);
     }
