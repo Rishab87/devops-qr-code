@@ -3,13 +3,19 @@ import httpProxy from 'http-proxy';
 // Create a proxy server
 const proxy = httpProxy.createProxyServer();
 
-export default function handler(req, res) {
-  // Proxy the request to the backend service
-  proxy.web(req, res, { target: 'http://backend-service' });
-}
+export async function POST(req) {
+  return new Promise((resolve, reject) => {
+    req.url = req.url.replace(/^\/api\/proxy/, ''); // Adjust URL path if needed
 
-export const config = {
-  api: {
-    bodyParser: false, // Disable body parsing, since we are proxying requests
-  },
-};
+    proxy.web(req, {
+      target: 'http://backend-service',
+      changeOrigin: true,
+    }, (error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(new Response(null, { status: 200 }));
+      }
+    });
+  });
+}
