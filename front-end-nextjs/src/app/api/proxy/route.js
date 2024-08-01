@@ -6,7 +6,8 @@ async function handleProxy(req) {
 
   const body = await req.json();
   const {url} = body;
-  const backendUrl = `http://backend-service/generate-qr/?${url}`;
+  //use /backend/ instead of /backend-service/ for development
+  const backendUrl = `http://backend-service:8000/generate-qr/?${url}`;
 
   const response = await fetch(backendUrl , {
     method: 'POST',
