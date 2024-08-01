@@ -22,8 +22,8 @@ export default function Home() {
       }
 
       const data = await response.json();
-      console.log(data);
-      setQrCodeUrl(data);
+        console.log(data);
+      setQrCodeUrl(data.data);
     } catch (error) {
       console.error('Error generating QR Code:', error);
     }

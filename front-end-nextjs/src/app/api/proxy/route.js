@@ -1,3 +1,5 @@
+import { NextResponse } from 'next/server';
+
 export async function POST(req) {
   return await handleProxy(req);
 }
@@ -6,8 +8,8 @@ async function handleProxy(req) {
 
   const body = await req.json();
   const {url} = body;
-  //use /backend/ instead of /backend-service/ for development
-  const backendUrl = `http://backend-service:8000/generate-qr/?${url}`;
+  //use /backend/ instead of /backend-service.default.svc.cluster.local:8000 for development
+  const backendUrl = `http://backend-service.default.svc.cluster.local:8000/generate-qr/?url=${url}`;
 
   const response = await fetch(backendUrl , {
     method: 'POST',
@@ -17,13 +19,14 @@ async function handleProxy(req) {
   });
 
   if (!response.ok) {
-    return {
+    return NextResponse.json({
       status: response.status,
       body: await response.text(),
-    };
+    } , {status: 500});
   }
 
   const data = await response.json();
-  return data.data.qr_code_url;
+  console.log(data);
+  return NextResponse.json({data: data.qr_code_url});
   
 }
